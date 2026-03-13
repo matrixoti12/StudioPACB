@@ -93,7 +93,7 @@ El objetivo es generar una estructura profesional modular reutilizable para proy
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': 'Bearer sk-a5f81691da8e4556a50c08c019d51509'
+                    'Authorization': `Bearer ${import.meta.env.VITE_DEEPSEEK_API_KEY || 'sk-a5f81691da8e4556a50c08c019d51509'}`
                 },
                 body: JSON.stringify({
                     model: 'deepseek-chat',
