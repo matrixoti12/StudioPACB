@@ -1,0 +1,422 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --bg-primary: #040914;
+  --bg-secondary: #0a1326;
+  --bg-tertiary: #111d35;
+  --bg-elevated: #1a2c4e;
+  --text-primary: #f8fafc;
+  --text-secondary: #8c9bba;
+  --accent: #00d2ff;
+  --accent-hover: #3a82f6;
+  --accent-transparent: rgba(0, 210, 255, 0.15);
+  --danger: #ef4444;
+  --danger-hover: #dc2626;
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-color-hover: rgba(255, 255, 255, 0.15);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(0, 210, 255, 0.15);
+  --transition-fast: 0.15s ease-in-out;
+  --transition-normal: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background: radial-gradient(circle at top, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+h2 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+}
+
+/* Operator Layout */
+.operator-layout {
+  display: grid;
+  grid-template-columns: 300px 1fr 350px;
+  width: 100%;
+  height: 100%;
+  gap: 1px;
+  background-color: var(--border-color);
+}
+
+.panel {
+  background-color: var(--bg-secondary);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-right: 1px solid var(--border-color);
+}
+
+.panel-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--bg-tertiary);
+  flex-shrink: 0;
+}
+
+.panel-content {
+  padding: 1rem;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.panel-content::-webkit-scrollbar {
+  width: 8px;
+}
+
+.panel-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-content::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+}
+
+.panel-content::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Common Components */
+button {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  letter-spacing: 0.2px;
+}
+
+button:hover:not(:disabled) {
+  background: var(--border-color-hover);
+  border-color: var(--text-secondary);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.primary {
+  background: var(--accent);
+  color: #000;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+button.primary:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+button.danger {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+button.danger:hover:not(:disabled) {
+  background: var(--danger);
+  color: white;
+  border-color: var(--danger);
+}
+
+button.active-toggle {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: var(--accent);
+}
+
+button.danger.active {
+  background: var(--danger);
+  color: white;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+input,
+textarea,
+select {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.875rem;
+  width: 100%;
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--accent);
+}
+
+/* Cards & Lists */
+.card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  backdrop-filter: blur(10px);
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.card.active {
+  background: rgba(16, 185, 129, 0.05);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.05rem;
+  margin-bottom: 0.35rem;
+  color: var(--text-primary);
+}
+
+.card-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Live Window Specific */
+.live-window {
+  width: 100vw;
+  height: 100vh;
+  background-color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.live-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+}
+
+.live-text-container {
+  position: relative;
+  z-index: 10;
+  width: 90%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.live-text {
+  color: white;
+  font-weight: 700;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.8), -2px -2px 8px rgba(0, 0, 0, 0.8);
+  white-space: pre-wrap;
+  line-height: 1.4;
+}
+
+/* Utils */
+.flex-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.badge {
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.badge.live {
+  background: #ef4444;
+  color: white;
+}
+
+.badge.paused {
+  background: #f59e0b;
+  color: white;
+}
+
+.toolbar {
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.75rem 1.25rem;
+  background: var(--bg-tertiary);
+  border-radius: var(--radius-lg);
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.block-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border-color);
+  padding: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  white-space: pre-wrap;
+  position: relative;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  min-height: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all var(--transition-fast);
+}
+
+.block-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+}
+
+.block-card.active {
+  border-color: var(--accent);
+  background: rgba(16, 185, 129, 0.05);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+.segmented-control {
+  display: flex;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 4px;
+  border-radius: var(--radius-md);
+  gap: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.segmented-control button {
+  background: transparent;
+  border: none;
+  flex-grow: 1;
+  color: var(--text-secondary);
+  padding: 0.4rem 0.5rem;
+}
+
+.segmented-control button.active {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@keyframes shrink {
+  from {
+    width: 100%;
+  }
+
+  to {
+    width: 0%;
+  }
+}
