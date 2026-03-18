@@ -69,7 +69,9 @@ export default function OperatorPanel() {
                 nextBlock();
             }, finalDelay * 1000);
         } else {
-            setCurrentSlideDuration(0);
+            // Only update if currently non-zero — avoids a pointless state update on every block click
+            const cur = useStore.getState().currentSlideDuration;
+            if (cur !== 0) setCurrentSlideDuration(0);
         }
         return () => clearTimeout(timer);
     }, [autoMode, isLive, activeTab, autoInterval, nextBlock, activeBlockIndex, activeSongIndex, smartAuto, setList, globalSpeedFactor, setCurrentSlideDuration]);
@@ -104,7 +106,15 @@ export default function OperatorPanel() {
                 </div>
 
                 <div className="flex-row" style={{ gap: '0.5rem' }}>
-                    <button onClick={() => setShowLibrary(!showLibrary)} className={showLibrary ? 'active-toggle' : ''}>
+                    <button
+                        onClick={() => {
+                            if (activeTab !== 'songs') {
+                                useStore.getState().setActiveTab('songs');
+                            }
+                            setShowLibrary(!showLibrary);
+                        }}
+                        className={showLibrary && activeTab === 'songs' ? 'active-toggle' : ''}
+                    >
                         <Sidebar size={16} /> Librería
                     </button>
                     <button onClick={() => setShowPreview(!showPreview)} className={showPreview ? 'active-toggle' : ''}>
@@ -124,16 +134,21 @@ export default function OperatorPanel() {
                 background: 'var(--bg-primary)',
                 gap: '0'
             }}>
-                {activeTab === 'songs' ? (
+                {(activeTab === 'songs') && (
                     <>
-                        <div style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column', opacity: showLibrary ? 1 : 0, transition: 'opacity 0.3s' }}>
-                            <LibraryPanel onClose={() => setShowLibrary(false)} />
-                        </div>
+                        {showLibrary && (
+                             <div style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                                <LibraryPanel onClose={() => setShowLibrary(false)} />
+                            </div>
+                        )}
+                       
                         <div style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                             <SetListPanel />
                         </div>
                     </>
-                ) : (
+                )}
+
+                 {activeTab === 'bible' && (
                     <div style={{ overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
                         <BiblePanel showLibrary={showLibrary} />
                     </div>

@@ -1,0 +1,32 @@
+[
+  {
+    "key": "canciones",
+    "label": "Canciones Generales",
+    "count": 516
+  },
+  {
+    "key": "ipuc",
+    "label": "Corario IPUC Castilla",
+    "count": 534
+  },
+  {
+    "key": "himnario",
+    "label": "Himnario Lluvias de Bendición",
+    "count": 253
+  },
+  {
+    "key": "infantiles",
+    "label": "Infantiles",
+    "count": 108
+  },
+  {
+    "key": "manantial",
+    "label": "Manantial de Inspiración",
+    "count": 272
+  },
+  {
+    "key": "micancionero",
+    "label": "Mi Cancionero",
+    "count": 22
+  }
+]

@@ -31,6 +31,11 @@ export const useStore = create(
             addSong: (song) => set((state) => ({ songs: [...state.songs, song] })),
             removeSong: (id) => set((state) => ({ songs: state.songs.filter(s => s.id !== id) })),
 
+            // Local Bibles
+            localBibles: [],
+            addLocalBible: (bible) => set((state) => ({ localBibles: [...state.localBibles, bible] })),
+            removeLocalBible: (id) => set((state) => ({ localBibles: state.localBibles.filter(b => b.id !== id) })),
+
             // Set List
             setList: [],
             addToSet: (song) => set((state) => {
@@ -79,6 +84,8 @@ export const useStore = create(
             backgroundUrl: '', // url or color
             bgFit: 'cover',
             bgOpacity: 50, // 0 to 100 (for dark overlay)
+            textUppercase: false, // For all caps text
+            animationStyle: 'fade', // fade | slideUp | slideLeft | zoom | blur | none
 
             // Actions for Live State
             setActiveTab: (tab) => set({ activeTab: tab }),
@@ -115,6 +122,9 @@ export const useStore = create(
             setBackgroundUrl: (url) => set({ backgroundUrl: url }),
             setBgFit: (fit) => set({ bgFit: fit }),
             setBgOpacity: (opacity) => set({ bgOpacity: opacity }),
+            setTextUppercase: (uppercase) => set({ textUppercase: uppercase }),
+            toggleTextUppercase: () => set((state) => ({ textUppercase: !state.textUppercase })),
+            setAnimationStyle: (style) => set({ animationStyle: style }),
 
             nextBlock: () => {
                 const { setList, activeSongIndex, activeBlockIndex } = get();
@@ -148,6 +158,7 @@ export const useStore = create(
             partialize: (state) => ({
                 // We persist library and setList, but not live playback state
                 songs: state.songs,
+                localBibles: state.localBibles,
                 setList: state.setList,
                 pinnedVerses: state.pinnedVerses,
                 smartAuto: state.smartAuto,
@@ -159,7 +170,9 @@ export const useStore = create(
                 textAlign: state.textAlign,
                 backgroundUrl: state.backgroundUrl,
                 bgFit: state.bgFit,
-                bgOpacity: state.bgOpacity
+                bgOpacity: state.bgOpacity,
+                textUppercase: state.textUppercase,
+                animationStyle: state.animationStyle
             }),
         }
     )

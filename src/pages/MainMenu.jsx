@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useStore } from '../store/useStore';
-import { Music, BookOpen } from 'lucide-react';
+import { Music, BookOpen, Megaphone } from 'lucide-react';
 
 export default function MainMenu() {
     const navigate = useNavigate();
@@ -87,6 +87,7 @@ export default function MainMenu() {
                     <h2>Biblia</h2>
                     <p>Proyección de versículos y citas en vivo</p>
                 </button>
+
             </div>
 
             <style>
