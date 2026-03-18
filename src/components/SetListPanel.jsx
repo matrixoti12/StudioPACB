@@ -1,6 +1,8 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback, useState } from 'react';
 import { useStore } from '../store/useStore';
-import { Play, Pause, AlertTriangle, ArrowUp, ArrowDown, Trash2, ListOrdered, MonitorPlay, PowerOff, SkipForward, SkipBack, PlaySquare, Settings, Timer } from 'lucide-react';
+import { Play, Pause, AlertTriangle, ArrowUp, ArrowDown, Trash2, ListOrdered, MonitorPlay, PowerOff, SkipForward, SkipBack, PlaySquare, Settings, Timer, Download } from 'lucide-react';
+import { toPng } from 'html-to-image';
+import JSZip from 'jszip';
 
 // ─── Memoized Block Card ──────────────────────────────────────────────────────
 // Extracted + memoized so that scrolling/clicking one block doesn't re-render ALL
@@ -105,6 +107,7 @@ export default function SetListPanel() {
     const reorderSet       = useStore(s => s.reorderSet);
     const clearSet         = useStore(s => s.clearSet);
 
+    const [isGenerating, setIsGenerating] = useState(false);
     const liveWindowRef = React.useRef(null);
 
     // Stable callbacks (prevent BlockCard/SongCard prop equality breaks)
@@ -134,11 +137,70 @@ export default function SetListPanel() {
         }
     }, []);
 
+    const handleDownloadBackup = async () => {
+        if (setList.length === 0) return;
+        setIsGenerating(true);
+
+        try {
+            const zip = new JSZip();
+            // Container oculto para renderizar
+            const container = document.createElement('div');
+            Object.assign(container.style, {
+                position: 'fixed', top: '-9999px', left: '-9999px',
+                width: '1280px', height: '720px',
+                backgroundColor: 'black', color: 'white',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '60px', padding: '60px',
+                textAlign: 'center', fontFamily: 'Arial, sans-serif',
+                lineHeight: '1.4', whiteSpace: 'pre-wrap'
+            });
+            document.body.appendChild(container);
+
+            for (let sIdx = 0; sIdx < setList.length; sIdx++) {
+                const song = setList[sIdx];
+                const cleanTitle = song.title.replace(/[^a-z0-9]/gi, '_').substring(0, 30);
+                const songFolder = zip.folder(`${sIdx + 1}_${cleanTitle}`);
+
+                for (let bIdx = 0; bIdx < song.blocks.length; bIdx++) {
+                    const block = song.blocks[bIdx];
+                    container.innerText = block.text || '';
+                    
+                    // Renderizar
+                    const dataUrl = await toPng(container, { quality: 0.9, width: 1280, height: 720 });
+                    const base64Data = dataUrl.split(',')[1];
+                    songFolder.file(`slide_${bIdx + 1}.png`, base64Data, { base64: true });
+                }
+            }
+
+            // Descargar ZIP
+            const content = await zip.generateAsync({ type: 'blob' });
+            const url = window.URL.createObjectURL(content);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = `Respaldo_Culto_${new Date().toISOString().slice(0, 10)}.zip`;
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            document.body.removeChild(container);
+
+        } catch (error) {
+            console.error("Error generando respaldo:", error);
+            alert("Error al generar el respaldo de diapositivas.");
+        } finally {
+            setIsGenerating(false);
+        }
+    };
+
     return (
         <div className="panel" style={{ flexGrow: 1, borderRight: '1px solid var(--border-color)' }}>
             <div className="panel-header flex-row justify-between">
                 <h2><ListOrdered size={20} /> Set del Culto</h2>
                 <div className="flex-row">
+                    <button className="secondary" onClick={handleDownloadBackup} disabled={isGenerating || setList.length === 0} title="Guardar diapositivas como imágenes">
+                        <Download size={16} /> {isGenerating ? 'Generando...' : 'Respaldo'}
+                    </button>
                     <button className="danger" onClick={clearSet} title="Limpiar todo el set">Limpiar Set</button>
                     <button className="primary" onClick={openLiveWindow}>
                         <MonitorPlay size={16} /> Abrir Ventana Live
