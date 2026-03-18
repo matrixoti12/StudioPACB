@@ -24,4 +24,7 @@ dist-ssr
 *.sw?
 
 # Build artifacts
-release/
+# Environment variables
+.env
+.env.local
+.env.*.local
